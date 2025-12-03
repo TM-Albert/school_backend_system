@@ -3,8 +3,6 @@
 --
 CREATE TYPE parent_relationship_type AS ENUM ('father', 'mother');
 
-
-
 --
 --
 -- 
@@ -140,10 +138,6 @@ CREATE TABLE Users(
     school_id INT NOT NULL,
     login VARCHAR(64) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    name VARCHAR(40) NOT NULL,
-    surname VARCHAR(40) NOT NULL,
-    birth_date DATE NOT NULL,
-    phone VARCHAR(15) NOT NULL,
     user_address_id INT NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
@@ -185,6 +179,10 @@ CREATE TABLE User_address(
 CREATE TABLE Director_details(
     id INT PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL,
+    name VARCHAR(40) NOT NULL,
+    surname VARCHAR(40) NOT NULL,
+    birth_date DATE NOT NULL,
+    phone VARCHAR(15) NOT NULL,
     date_of_appointment DATE NOT NULL,
     mandate_expiry_date DATE NOT NULL,
     contact_email_official VARCHAR(255),
@@ -201,6 +199,10 @@ CREATE TABLE Director_details(
 CREATE TABLE Student_details(
     id INT PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL,
+    name VARCHAR(40) NOT NULL,
+    surname VARCHAR(40) NOT NULL,
+    birth_date DATE NOT NULL,
+    phone VARCHAR(15) NOT NULL,
     grade_level TINYINT NOT NULL,
     pesel VARCHAR(64) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -217,6 +219,10 @@ CREATE TABLE Parent_details(
     id INT PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL,
     student_id INT NOT NULL,
+    name VARCHAR(40) NOT NULL,
+    surname VARCHAR(40) NOT NULL,
+    birth_date DATE NOT NULL,
+    phone VARCHAR(15) NOT NULL,
     relationship_to_student parent_relationship_type NOT NULL,
     emergency_contact_priority BOOLEAN NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -236,6 +242,10 @@ CREATE TABLE Parent_details(
 CREATE TABLE Teacher_details(
     id INT PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL,
+    name VARCHAR(40) NOT NULL,
+    surname VARCHAR(40) NOT NULL,
+    birth_date DATE NOT NULL,
+    phone VARCHAR(15) NOT NULL,
     pesel VARCHAR(64) NOT NULL,
     base_salary NUMERIC NOT NULL,
     currency_id INT NOT NULL,
@@ -348,4 +358,20 @@ CREATE TABLE Teacher_replacement(
     CONSTRAINT fk_teacher_replacement_lesson
         FOREIGN KEY (lesson_id)
         REFERENCES Lessons (id)
+);
+
+CREATE TABLE Refresh_tokens(
+    id BIGINT PRIMARY KEY NOT NULL,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    user_id UUID NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    is_revoked BOOLEAN NOT NULL DEFAULT FALSE,
+    issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    created_ip INET,
+    device_info VARCHAR(255),
+
+    -- Foreign keys
+    CONSTRAINT fk_refresh_tokens_user
+        FOREIGN KEY (user_id)
+        REFERENCES Users (id)
 );
