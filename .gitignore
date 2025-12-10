@@ -1,2 +1,4 @@
 /sql/setup_db.sql
 .requirements-dev.txt
+.env
+school_mngment/
