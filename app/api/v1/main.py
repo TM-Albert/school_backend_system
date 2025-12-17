@@ -1,12 +1,17 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-from fastapi import Depends
+from contextlib import asynccontextmanager
 
-DATABASE_URL = ""
+from fastapi import FastAPI
 
-Base = declarative_base()
 
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True
-)
+def load():
+    print("load")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    load()
+    yield
+    print("shutdown")
+
+
+app = FastAPI(lifespan=lifespan)

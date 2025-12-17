@@ -2,3 +2,4 @@
 .requirements-dev.txt
 .env
 school_mngment/
+school_backend_venv

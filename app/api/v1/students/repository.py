@@ -1,13 +1,11 @@
-from schemas import StudentCreate_DTO
+import aiosqlite
+
 
 class StudentRepository:
-    def __init__(self):
-        pass
+    def __init__(self, cursor):
+        self._cursor = cursor
 
-    def create_student(db: Session, data: StudentCreate_DTO):
-        # create student object
+    async def get_all(self):
+        await self._cursor.execute("SELECT * FROM STUDENTS")
 
-        # db session add commit refresh
-
-        # returns the student
-        pass
+        return await self._cursor.fetchall()
