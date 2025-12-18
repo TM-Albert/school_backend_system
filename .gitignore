@@ -1,5 +1,5 @@
 /sql/setup_db.sql
 .requirements-dev.txt
-.env
+.env*
 school_mngment/
 school_backend_venv

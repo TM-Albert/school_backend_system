@@ -1,17 +1,14 @@
 from contextlib import asynccontextmanager
 
+import asyncpg
 from fastapi import FastAPI
-
-
-def load():
-    print("load")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    load()
+    app.state.pool = await asyncpg.create_pool("DATABASE_URL", min_size=5, max_size=20)
     yield
-    print("shutdown")
+    await app.state.pool.close()
 
 
 app = FastAPI(lifespan=lifespan)
