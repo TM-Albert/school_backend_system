@@ -3,3 +3,7 @@ SELECT id, email, is_active
 FROM users
 WHERE id = $1
 """
+
+GET_ALL = """
+SLEECT * FROM STUDENTS
+"""
