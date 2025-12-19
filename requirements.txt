@@ -1,3 +1,4 @@
 fastapi[default]
 asyncpg
 dotenv
+uvicorn[standard]
