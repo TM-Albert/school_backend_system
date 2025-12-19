@@ -19,20 +19,7 @@ CREATE TABLE School(
     profile_id INT,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ,
-
-    -- Foreign keys
-    CONSTRAINT fk_school_voivodeship
-        FOREIGN KEY (voivodeship_id)
-        REFERENCES Voivodeships (id),
-
-    CONSTRAINT fk_school_profile
-        FOREIGN KEY (profile_id)
-        REFERENCES School_profiles (id),
-
-    CONSTRAINT fk_school_director
-        FOREIGN KEY (director_id)
-        REFERENCES Users (id)
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Voivodeships(
@@ -83,12 +70,7 @@ CREATE TABLE Classroom(
     school_year_id INT NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ,
-
-    -- Foreign keys
-    CONSTRAINT fk_classroom_school_year
-        FOREIGN KEY (school_year_id)
-        REFERENCES School_years (id)
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Class_students(
@@ -98,16 +80,7 @@ CREATE TABLE Class_students(
     assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ,
-
-    -- Foreign keys
-    CONSTRAINT fk_class_students_classroom
-        FOREIGN KEY (class_id)
-        REFERENCES Classroom (id),
-
-    CONSTRAINT fk_class_students_student
-        FOREIGN KEY (student_id)
-        REFERENCES Student_details (id)
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Subjects(
@@ -124,12 +97,7 @@ CREATE TABLE Subject_lessons_plan(
     description TEXT,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ,
-
-        -- Foreign keys
-    CONSTRAINT fk_subject_lessons_plan_subject
-        FOREIGN KEY (subject_id)
-        REFERENCES Subjects (id)
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Users(
@@ -141,20 +109,7 @@ CREATE TABLE Users(
     user_address_id INT NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ,
-
-    -- Foreign keys
-    CONSTRAINT fk_user_school
-        FOREIGN KEY (school_id)
-        REFERENCES School (id),
-
-    CONSTRAINT fk_user_role
-        FOREIGN KEY (user_role_id)
-        REFERENCES User_roles (id),
-
-    CONSTRAINT fk_user_address
-        FOREIGN KEY (user_address_id)
-        REFERENCES User_address (id)
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE User_roles(
@@ -188,12 +143,7 @@ CREATE TABLE Director_details(
     contact_email_official VARCHAR(255),
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ,
-
-    -- Foreign keys
-    CONSTRAINT fk_director_details_user
-        FOREIGN KEY (user_id)
-        REFERENCES Users (id)
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Student_details(
@@ -203,16 +153,11 @@ CREATE TABLE Student_details(
     surname VARCHAR(40) NOT NULL,
     birth_date DATE NOT NULL,
     phone VARCHAR(15) NOT NULL,
-    grade_level TINYINT NOT NULL,
+    grade_level SMALLINT NOT NULL,
     pesel VARCHAR(64) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ,
-
-        -- Foreign keys
-    CONSTRAINT fk_student_details_user
-        FOREIGN KEY (user_id)
-        REFERENCES Users (id)
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Parent_details(
@@ -234,9 +179,9 @@ CREATE TABLE Parent_details(
         FOREIGN KEY (user_id)
         REFERENCES Users (id),
 
-    CONSTRAINT fk_parent_student
+    CONSTRAINT fk_parent_student_details
         FOREIGN KEY (student_id)
-        REFERENCES Student(id)
+        REFERENCES Student_details(id)
 );
 
 CREATE TABLE Teacher_details(
@@ -260,11 +205,11 @@ CREATE TABLE Teacher_details(
         REFERENCES Users (id),
 
     CONSTRAINT fk_teacher_currency
-        FOREIGN (currency_id)
+        FOREIGN KEY (currency_id)
         REFERENCES Currencies (id),
 
     CONSTRAINT fk_teacher_department
-        FOREIGN (department_id)
+        FOREIGN KEY (department_id)
         REFERENCES Departments (id)
 );
 
@@ -282,7 +227,7 @@ CREATE TABLE Lessons(
     class_id INT NOT NULL,
     subject_id INT NOT NULL,
     teacher_id INT NOT NULL,
-    week_day TINYINT NOT NULL,
+    week_day SMALLINT NOT NULL,
     period_id INT NOT NULL,
     is_active BOOLEAN NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -375,3 +320,52 @@ CREATE TABLE Refresh_tokens(
         FOREIGN KEY (user_id)
         REFERENCES Users (id)
 );
+
+ALTER TABLE School
+ADD CONSTRAINT fk_school_voivodeship
+    FOREIGN KEY (voivodeship_id) REFERENCES Voivodeships (id),
+
+ADD CONSTRAINT fk_school_profile
+    FOREIGN KEY (profile_id) REFERENCES School_profiles (id),
+
+ADD CONSTRAINT fk_school_director
+    FOREIGN KEY (director_id) REFERENCES Director_details (id);
+
+
+ALTER TABLE Classroom
+ADD CONSTRAINT fk_classroom_school_year
+    FOREIGN KEY (school_year_id) REFERENCES School_years (id);
+
+
+ALTER TABLE Class_students
+ADD CONSTRAINT fk_class_students_classroom
+    FOREIGN KEY (class_id) REFERENCES Classroom (id),
+
+ADD CONSTRAINT fk_class_students_student
+    FOREIGN KEY (student_id) REFERENCES Student_details (id);
+
+
+ALTER TABLE Subject_lessons_plan
+ADD CONSTRAINT fk_subject_lessons_plan_subject
+    FOREIGN KEY (subject_id) REFERENCES Subjects (id);
+
+
+ALTER TABLE Users
+ADD CONSTRAINT fk_user_school
+    FOREIGN KEY (school_id) REFERENCES School (id),
+
+ADD CONSTRAINT fk_user_role
+    FOREIGN KEY (user_role_id) REFERENCES User_roles (id),
+
+ADD CONSTRAINT fk_user_address
+    FOREIGN KEY (user_address_id) REFERENCES User_address (id);
+
+
+ALTER TABLE Director_details
+ADD CONSTRAINT fk_director_details_user
+    FOREIGN KEY (user_id) REFERENCES Users (id);
+
+
+ALTER TABLE Student_details
+ADD CONSTRAINT fk_student_details_user
+    FOREIGN KEY (user_id) REFERENCES Users (id);

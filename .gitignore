@@ -3,3 +3,4 @@
 .env*
 school_mngment/
 school_backend_venv
+__pycache__
