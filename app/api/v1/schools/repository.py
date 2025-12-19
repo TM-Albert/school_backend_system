@@ -1,6 +1,7 @@
 import asyncpg
-from models import SchoolCreate, SchoolUpdate
-from queries import INSERT_SCHOOL
+
+from .models import SchoolCreate, SchoolUpdate
+from .queries import INSERT_SCHOOL, SELECT_SCHOOL_BY_ID
 
 
 class SchoolRepository:
@@ -29,3 +30,8 @@ class SchoolRepository:
 
     async def update_school(self, data: SchoolUpdate):
         pass
+
+    async def get_school_by_id(self, id: int):
+        school = self.db_connection.fetchrow(SELECT_SCHOOL_BY_ID, id)
+
+        return school

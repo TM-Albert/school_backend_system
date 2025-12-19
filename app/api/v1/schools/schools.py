@@ -1,9 +1,9 @@
 import asyncpg
+from db import get_connection
 from fastapi import APIRouter, Depends, HTTPException, status
-from models import SchoolApiResponse, SchoolCreate, SchoolUpdate
-from service import SchoolService
 
-from ..db import get_connection
+from .models import SchoolApiResponse, SchoolCreate, SchoolUpdate
+from .service import SchoolService
 
 router = APIRouter(prefix="/schools")
 
@@ -36,8 +36,14 @@ async def update_school(
     pass
 
 
-@router.get("/{id}", response_model=SchoolApiResponse)
+@router.get("/{id}")
 async def get_school(
     id: int, db_connection: asyncpg.Connection = Depends(get_connection)
 ):
-    pass
+    print("RETURN SCHOOL ID")
+
+    school_service = SchoolService(db_connection)
+
+    school = await school_service.get_school(id)
+
+    return {"id": id}

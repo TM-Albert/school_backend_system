@@ -1,5 +1,5 @@
-from models import SchoolCreate, SchoolUpdate
-from repository import SchoolRepository
+from .models import SchoolCreate, SchoolUpdate
+from .repository import SchoolRepository
 
 
 class SchoolService:
@@ -13,3 +13,8 @@ class SchoolService:
 
     async def update_school(self, data: SchoolUpdate):
         pass
+
+    async def get_school(self, id: int):
+        school = await self.repo.get_school_by_id(id)
+
+        return school
