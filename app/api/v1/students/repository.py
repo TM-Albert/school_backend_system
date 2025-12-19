@@ -11,5 +11,5 @@ class StudentRepository:
     async def get_by_id(self, user_id: uuid.UUID):
         return await self.conn.fetchrow(GET_USER_BY_ID, user_id)
 
-    async def get_all(self, limit: int, offset: int):
+    async def get_all_from_school(self, limit: int, offset: int):
         return await self.conn.fetch(GET_ALL)

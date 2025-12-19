@@ -5,7 +5,7 @@ CREATE TYPE parent_relationship_type AS ENUM ('father', 'mother');
 
 --
 --
--- 
+--
 CREATE TABLE School(
     id INT PRIMARY KEY NOT NULL,
     name VARCHAR(60) NOT NULL,
@@ -15,8 +15,8 @@ CREATE TABLE School(
     street VARCHAR(60) NOT NULL,
     post_code VARCHAR(8) NOT NULL CHECK (post_code ~ '^[0-9]{2}-[0-9]{3}$'),
     secretary_phone VARCHAR(15) NOT NULL,
-    director_id INT NOT NULL,
-    profile_id INT NOT NULL,    
+    director_id INT,
+    profile_id INT,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
     deleted_date TIMESTAMPTZ,
@@ -40,7 +40,7 @@ CREATE TABLE Voivodeships(
     name VARCHAR(40) NOT NULL UNIQUE,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ 
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE School_profiles(
@@ -48,7 +48,7 @@ CREATE TABLE School_profiles(
     name VARCHAR(60) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ 
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Currencies(
@@ -56,7 +56,7 @@ CREATE TABLE Currencies(
     value VARCHAR(5) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ 
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Departments(
@@ -64,7 +64,7 @@ CREATE TABLE Departments(
     name VARCHAR(40) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ 
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE School_years(
@@ -74,7 +74,7 @@ CREATE TABLE School_years(
     end_date DATE NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ 
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Classroom(
@@ -94,7 +94,7 @@ CREATE TABLE Classroom(
 CREATE TABLE Class_students(
     id INT PRIMARY KEY NOT NULL,
     class_id INT NOT NULL,
-    student_id INT NOT NULL, 
+    student_id INT NOT NULL,
     assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
@@ -151,7 +151,7 @@ CREATE TABLE Users(
     CONSTRAINT fk_user_role
         FOREIGN KEY (user_role_id)
         REFERENCES User_roles (id),
-        
+
     CONSTRAINT fk_user_address
         FOREIGN KEY (user_address_id)
         REFERENCES User_address (id)
@@ -162,7 +162,7 @@ CREATE TABLE User_roles(
     name VARCHAR(20) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ 
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE User_address(
@@ -173,7 +173,7 @@ CREATE TABLE User_address(
     post_code VARCHAR(8) NOT NULL CHECK (post_code ~ '^[0-9]{2}-[0-9]{3}$'),
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
-    deleted_date TIMESTAMPTZ 
+    deleted_date TIMESTAMPTZ
 );
 
 CREATE TABLE Director_details(
@@ -258,7 +258,7 @@ CREATE TABLE Teacher_details(
     CONSTRAINT fk_teacher_user
         FOREIGN KEY (user_id)
         REFERENCES Users (id),
-    
+
     CONSTRAINT fk_teacher_currency
         FOREIGN (currency_id)
         REFERENCES Currencies (id),
