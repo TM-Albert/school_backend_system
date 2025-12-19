@@ -1,5 +1,5 @@
 import asyncpg
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from models import SchoolApiResponse, SchoolCreate, SchoolUpdate
 from service import SchoolService
 
@@ -10,12 +10,21 @@ router = APIRouter()
 
 @router.post("/schools")
 async def create_school(
-    data: SchoolCreate, db_connection: asyncpg.Connection = Depends(get_connection)
+    data: SchoolCreate,
+    db_connection: asyncpg.Connection = Depends(get_connection),
+    status_code=status.HTTP_201_CREATED,
 ):
     school_service = SchoolService(db_connection)
 
-    await school_service.create_school(data)
-    pass
+    school_created: bool = await school_service.create_school(data)
+
+    if school_created:
+        return {"success": True}
+
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail={"success": False, "message": ""},
+    )
 
 
 @router.put("/schools/{id}")

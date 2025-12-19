@@ -1,34 +1,34 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PositiveInt
 
 
 class SchoolCreate(BaseModel):
-    id: int
+    id: PositiveInt
     name: str = Field(max_length=60)
-    number: int
+    number: PositiveInt
     voivodeship_id: int
     city: str = Field(max_length=60)
     street: str = Field(max_length=60)
     post_code: str = Field(max_length=8)
     secretary_phone: str = Field(max_length=15)
 
-    director_id: Optional[int] = None
-    profile_id: Optional[int] = None
+    director_id: Optional[PositiveInt] = None
+    profile_id: Optional[PositiveInt] = None
 
 
 class SchoolApiResponse(BaseModel):
-    id: int
+    id: PositiveInt
     name: str
-    number: int
-    voivodeship_id: int
+    number: PositiveInt
+    voivodeship_id: PositiveInt
     city: str
     street: str
     post_code: str
     secretary_phone: str
-    director_id: Optional[int]
-    profile_id: Optional[int]
+    director_id: Optional[PositiveInt]
+    profile_id: Optional[PositiveInt]
     creation_date: datetime
     updated_date: Optional[datetime]
     deleted_date: Optional[datetime]
@@ -36,12 +36,12 @@ class SchoolApiResponse(BaseModel):
 
 class SchoolUpdate(BaseModel):
     name: Optional[str] = Field(None, max_length=60)
-    number: Optional[int] = None
-    voivodeship_id: Optional[int] = None
+    number: Optional[PositiveInt] = None
+    voivodeship_id: Optional[PositiveInt] = None
     city: Optional[str] = Field(None, max_length=60)
     street: Optional[str] = Field(None, max_length=60)
     post_code: Optional[str] = None
     secretary_phone: Optional[str] = Field(None, max_length=15)
 
-    director_id: Optional[int] = None
-    profile_id: Optional[int] = None
+    director_id: Optional[PositiveInt] = None
+    profile_id: Optional[PositiveInt] = None
