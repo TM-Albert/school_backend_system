@@ -1,5 +1,3 @@
-import uuid
-
 import asyncpg
 from models import SchoolCreate, SchoolUpdate
 from queries import INSERT_SCHOOL

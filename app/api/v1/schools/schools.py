@@ -5,10 +5,10 @@ from service import SchoolService
 
 from ..db import get_connection
 
-router = APIRouter()
+router = APIRouter(prefix="/schools")
 
 
-@router.post("/schools")
+@router.post("/")
 async def create_school(
     data: SchoolCreate,
     db_connection: asyncpg.Connection = Depends(get_connection),
@@ -27,7 +27,7 @@ async def create_school(
     )
 
 
-@router.put("/schools/{id}")
+@router.put("/{id}")
 async def update_school(
     id: int,
     data: SchoolUpdate,
@@ -36,7 +36,7 @@ async def update_school(
     pass
 
 
-@router.get("/schools/{id}", response_model=SchoolApiResponse)
+@router.get("/{id}", response_model=SchoolApiResponse)
 async def get_school(
     id: int, db_connection: asyncpg.Connection = Depends(get_connection)
 ):
