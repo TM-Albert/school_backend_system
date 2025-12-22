@@ -1,14 +1,14 @@
 import asyncpg
 
-from .models import SchoolCreate, SchoolUpdate
-from .queries import INSERT_SCHOOL, SELECT_SCHOOL_BY_ID
+from .models import SchoolCreateINPUT, SchoolUpdateINPUT
+from .queries import INSERT_SCHOOL, SELECT_ALL_SCHOOLS, SELECT_SCHOOL_BY_ID
 
 
 class SchoolRepository:
     def __init__(self, db_connection: asyncpg.Connection):
         self.db_connection = db_connection
 
-    async def create_school(self, data: SchoolCreate) -> bool:
+    async def create_school(self, data: SchoolCreateINPUT) -> bool:
         created_row = await self.db_connection.fetchrow(
             INSERT_SCHOOL,
             data.id,
@@ -28,10 +28,15 @@ class SchoolRepository:
 
         return True
 
-    async def update_school(self, data: SchoolUpdate):
+    async def update_school(self, data: SchoolUpdateINPUT):
         pass
 
     async def get_school_by_id(self, id: int):
-        school = self.db_connection.fetchrow(SELECT_SCHOOL_BY_ID, id)
+        school = await self.db_connection.fetchrow(SELECT_SCHOOL_BY_ID, id)
 
         return school
+
+    async def get_all_schools(self):
+        schools = await self.db_connection.fetch(SELECT_ALL_SCHOOLS)
+
+        return schools

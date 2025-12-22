@@ -10,3 +10,7 @@ SELECT_SCHOOL_BY_ID = """
 SELECT * FROM schools
 WHERE id = $1
 """
+
+SELECT_ALL_SCHOOLS = """
+SELECT * FROM schools
+"""
