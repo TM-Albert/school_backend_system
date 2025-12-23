@@ -55,8 +55,10 @@ CREATE TABLE Departments(
 );
 
 CREATE TABLE School_departments(
-    school_id INT NOT NULL PRIMARY KEY,
-    department_id INT NOT NULL PRIMARY KEY,
+    school_id INT NOT NULL,
+    department_id INT NOT NULL,
+
+	PRIMARY KEY (school_id, department_id),
 
     FOREIGN KEY (school_id)
         REFERENCES School (id)
