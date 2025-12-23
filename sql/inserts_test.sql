@@ -36,3 +36,8 @@ INSERT INTO Departments (id, name) VALUES
 (5, 'Edukacja'),
 (6, 'Techniczne'),
 (7, 'Gastronomia');
+
+INSERT INTO Currencies (id, value) VALUES
+(1, 'PLN'),
+(2, 'EUR'),
+(3, 'USD');
