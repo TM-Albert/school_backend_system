@@ -54,6 +54,19 @@ CREATE TABLE Departments(
     deleted_date TIMESTAMPTZ
 );
 
+CREATE TABLE School_departments(
+    school_id INT NOT NULL PRIMARY KEY,
+    department_id INT NOT NULL PRIMARY KEY,
+
+    FOREIGN KEY (school_id)
+        REFERENCES School (id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (department_id)
+        REFERENCES Departments (id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE School_years(
     id INT PRIMARY KEY NOT NULL,
     name VARCHAR(9) NOT NULL,
