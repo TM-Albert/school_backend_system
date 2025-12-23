@@ -7,7 +7,7 @@ CREATE TYPE parent_relationship_type AS ENUM ('father', 'mother');
 --
 --
 CREATE TABLE School(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     name VARCHAR(60) NOT NULL,
     number SMALLINT NOT NULL,
     voivodeship_id INT NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE School(
 );
 
 CREATE TABLE Voivodeships(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     name VARCHAR(40) NOT NULL UNIQUE,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
@@ -31,7 +31,7 @@ CREATE TABLE Voivodeships(
 );
 
 CREATE TABLE School_profiles(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     name VARCHAR(60) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
@@ -39,7 +39,7 @@ CREATE TABLE School_profiles(
 );
 
 CREATE TABLE Currencies(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     value VARCHAR(5) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
@@ -47,7 +47,7 @@ CREATE TABLE Currencies(
 );
 
 CREATE TABLE Departments(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     name VARCHAR(40) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
@@ -70,7 +70,7 @@ CREATE TABLE School_departments(
 );
 
 CREATE TABLE School_years(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     name VARCHAR(9) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE School_years(
 );
 
 CREATE TABLE Classroom(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     name VARCHAR(2) NOT NULL,
     school_year_id INT NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -89,7 +89,6 @@ CREATE TABLE Classroom(
 );
 
 CREATE TABLE Class_students(
-    id INT PRIMARY KEY NOT NULL,
     class_id INT NOT NULL,
     student_id INT NOT NULL,
     assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -99,7 +98,7 @@ CREATE TABLE Class_students(
 );
 
 CREATE TABLE Subjects(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     name VARCHAR(30) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
@@ -107,7 +106,6 @@ CREATE TABLE Subjects(
 );
 
 CREATE TABLE Subject_lessons_plan(
-    id INT PRIMARY KEY NOT NULL,
     subject_id INT NOT NULL,
     description TEXT,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -128,7 +126,7 @@ CREATE TABLE Users(
 );
 
 CREATE TABLE User_roles(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     name VARCHAR(20) NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_date TIMESTAMPTZ,
@@ -136,7 +134,7 @@ CREATE TABLE User_roles(
 );
 
 CREATE TABLE User_address(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     city VARCHAR(60) NOT NULL,
     street VARCHAR(60) NOT NULL,
     home_number VARCHAR(3) NOT NULL,
@@ -147,7 +145,7 @@ CREATE TABLE User_address(
 );
 
 CREATE TABLE Director_details(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL,
     name VARCHAR(40) NOT NULL,
     surname VARCHAR(40) NOT NULL,
@@ -162,7 +160,7 @@ CREATE TABLE Director_details(
 );
 
 CREATE TABLE Student_details(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL,
     name VARCHAR(40) NOT NULL,
     surname VARCHAR(40) NOT NULL,
@@ -176,7 +174,7 @@ CREATE TABLE Student_details(
 );
 
 CREATE TABLE Parent_details(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL,
     student_id INT NOT NULL,
     name VARCHAR(40) NOT NULL,
@@ -200,7 +198,7 @@ CREATE TABLE Parent_details(
 );
 
 CREATE TABLE Teacher_details(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL,
     name VARCHAR(40) NOT NULL,
     surname VARCHAR(40) NOT NULL,
@@ -229,7 +227,7 @@ CREATE TABLE Teacher_details(
 );
 
 CREATE TABLE Periods(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     start_time DATE NOT NULL,
     end_time DATE NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -238,7 +236,7 @@ CREATE TABLE Periods(
 );
 
 CREATE TABLE Lessons(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     class_id INT NOT NULL,
     subject_id INT NOT NULL,
     teacher_id INT NOT NULL,
@@ -264,7 +262,7 @@ CREATE TABLE Lessons(
 );
 
 CREATE TABLE Attendance(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     lesson_id INT NOT NULL,
     student_id INT NOT NULL,
     status VARCHAR(10) NOT NULL,
@@ -283,7 +281,7 @@ CREATE TABLE Attendance(
 );
 
 CREATE TABLE Teacher_absence(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     teacher_id INT NOT NULL,
     date DATE NOT NULL,
     reason TEXT NOT NULL,
@@ -298,7 +296,7 @@ CREATE TABLE Teacher_absence(
 );
 
 CREATE TABLE Teacher_replacement(
-    id INT PRIMARY KEY NOT NULL,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     absence_id INT NOT NULL,
     replacement_teacher_id INT NOT NULL,
     lesson_id INT NOT NULL,
@@ -321,7 +319,7 @@ CREATE TABLE Teacher_replacement(
 );
 
 CREATE TABLE Refresh_tokens(
-    id BIGINT PRIMARY KEY NOT NULL,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     token_hash CHAR(64) NOT NULL UNIQUE,
     user_id UUID NOT NULL,
     expires_at TIMESTAMPTZ NOT NULL,
