@@ -67,14 +67,3 @@ async def get_all_schools(db_connection: asyncpg.Connection = Depends(get_connec
 #     school = await school_service.get_school(id)
 
 #     return {"id": id}
-
-
-## Teachers + director
-@router.get("/workers")
-async def get_all_workers(db_connection: asyncpg.Connection = Depends(get_connection)):
-    school_service = SchoolService(db_connection)
-
-    school_workers = school_service
-
-
-## Teachears + director
