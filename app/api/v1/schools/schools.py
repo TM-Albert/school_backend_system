@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from .models import (
     SchoolAdminOUTPUT,
     SchoolApiOUTPUT,
+    SchoolBaseOUTPUT,
     SchoolCreateINPUT,
     SchoolUpdateINPUT,
 )
@@ -35,13 +36,30 @@ router = APIRouter(prefix="/schools")
 
 
 ## SELECT ALL SCHOOLS
-@router.get("/", response_model=List[SchoolApiOUTPUT], status_code=status.HTTP_200_OK)
+@router.get(
+    "/admin", response_model=List[SchoolAdminOUTPUT], status_code=status.HTTP_200_OK
+)
 async def get_all_schools(db_connection: asyncpg.Connection = Depends(get_connection)):
     school_service = SchoolService(db_connection)
 
-    schools: List[SchoolApiOUTPUT] = await school_service.get_all_schools()
+    schools: List[SchoolAdminOUTPUT] = await school_service.get_all_schools()
 
     return {"data": schools}
+
+
+## SELECT PARTICULAR SCHOOL
+@router.get("/{id}", response_model=SchoolBaseOUTPUT)
+async def get_school(
+    id: int, db_connection: asyncpg.Connection = Depends(get_connection)
+):
+    print("RETURN SCHOOL ID")
+
+    school_service = SchoolService(db_connection)
+
+    ## Implement the types and add SchoolApiResponse
+    school: SchoolBaseOUTPUT = await school_service.get_school(id)
+
+    return {"id": school}
 
 
 ## UPDATE SCHOOL
@@ -52,18 +70,3 @@ async def get_all_schools(db_connection: asyncpg.Connection = Depends(get_connec
 #     db_connection: asyncpg.Connection = Depends(get_connection),
 # ):
 #     pass
-
-
-## SELECT PARTICULAR SCHOOL
-# @router.get("/{id}")
-# async def get_school(
-#     id: int, db_connection: asyncpg.Connection = Depends(get_connection)
-# ):
-#     print("RETURN SCHOOL ID")
-
-#     school_service = SchoolService(db_connection)
-
-#     ## Implement the types and add SchoolApiResponse
-#     school = await school_service.get_school(id)
-
-#     return {"id": id}
