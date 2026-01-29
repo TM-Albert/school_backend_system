@@ -1,72 +1,46 @@
-from typing import List
-
-import asyncpg
-from db import get_connection
-from fastapi import APIRouter, Depends, HTTPException, status
-
-from .models import (
-    SchoolAdminOUTPUT,
-    SchoolApiOUTPUT,
-    SchoolBaseOUTPUT,
-    SchoolCreateINPUT,
-    SchoolUpdateINPUT,
-)
-from .service import SchoolService
+import logging
+from fastapi import APIRouter, Request, HTTPException, status
+from queries import SELECT_ALL_SCHOOLS, SELECT_SCHOOL_BY_ID, INSERT_SCHOOL
 
 router = APIRouter(prefix="/schools")
 
-
-## CREATE NEW SCHOOL
-# @router.post("/", status_code=status.HTTP_201_CREATED)
-# async def create_school(
-#     data: SchoolCreateINPUT,
-#     db_connection: asyncpg.Connection = Depends(get_connection),
-# ):
-#     school_service = SchoolService(db_connection)
-
-#     school_created: bool = await school_service.create_school(data)
-
-#     if school_created:
-#         return {"success": True}
-
-#     raise HTTPException(
-#         status_code=status.HTTP_400_BAD_REQUEST,
-#         detail={"success": False, "message": ""},
-#     )
-
-
 ## SELECT ALL SCHOOLS
-@router.get(
-    "/admin", response_model=List[SchoolAdminOUTPUT], status_code=status.HTTP_200_OK
-)
-async def get_all_schools(db_connection: asyncpg.Connection = Depends(get_connection)):
-    school_service = SchoolService(db_connection)
+@router.get("/", status_code=status.HTTP_200_OK)
+async def get_all_schools(request: Request):
+    pool = request.app.state.pool
 
-    schools: List[SchoolAdminOUTPUT] = await school_service.get_all_schools()
+    try:
+        async with pool.acquire() as connection:
+            query = SELECT_ALL_SCHOOLS
+            rows = await connection.fetch(query)
 
-    return {"data": schools}
+            return {"data": rows}
+
+    except Exception as e:
+        print(f"DATABASE ERROR: {str(e)}")
+
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+            detail="We encountered server error"
+        )
 
 
 ## SELECT PARTICULAR SCHOOL
-@router.get("/{id}", response_model=SchoolBaseOUTPUT)
-async def get_school(
-    id: int, db_connection: asyncpg.Connection = Depends(get_connection)
-):
-    print("RETURN SCHOOL ID")
+@router.get("/{id}", status_code=status.HTTP_200_OK)
+async def get_school(request: Request, id: int):
+    pool = request.app.state.pool
 
-    school_service = SchoolService(db_connection)
+    try:
+        async with pool.acquire() as connection:
+            query = SELECT_SCHOOL_BY_ID
+            row = await connection.fetch(query, id)
 
-    ## Implement the types and add SchoolApiResponse
-    school: SchoolBaseOUTPUT = await school_service.get_school(id)
+            return {"data": row}
 
-    return {"id": school}
+    except Exception as e:
+        print(f"DATABASE ERROR: {str(e)}")
 
-
-## UPDATE SCHOOL
-# @router.put("/{id}")
-# async def update_school(
-#     id: int,
-#     data: SchoolUpdateINPUT,
-#     db_connection: asyncpg.Connection = Depends(get_connection),
-# ):
-#     pass
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+            detail="We encountered server error"
+        )
